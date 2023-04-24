@@ -5,7 +5,7 @@ remote_url=$(git config --get remote.origin.url | tr -d '\n')
 
 # Get the last n commits
 n=$1
-commits=$(git log -n $n --pretty=format:'%H %s')
+commits=$(git log --no-merges -n $n --pretty=format:'%H %s' | grep -v 'style:')
 
 # Build the changelog
 changelog="## Changelog\n\n"

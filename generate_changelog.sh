@@ -3,9 +3,12 @@
 # Get the remote repository URL
 remote_url=$(git config --get remote.origin.url | tr -d '\n')
 
-# Get the last n commits
-n=$1
-commits=$(git log --no-merges -n $n --pretty=format:'%H %s' | grep -v 'style:')
+# Get the last n commits or all since 
+if [ -z "$1" ]; then
+  commits=$(git log --no-merges --invert-grep --grep='^style:' --pretty=format:'%H %s' $(git log -n 1 origin/develop --pretty=format:'%H')..HEAD)
+else
+  commits=$(git log --no-merges --invert-grep --grep='^style:' -n $1 --pretty=format:'%H %s')
+fi
 
 # Build the changelog
 changelog="## Changelog\n\n"
